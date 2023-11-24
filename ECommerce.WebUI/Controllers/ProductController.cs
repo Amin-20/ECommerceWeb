@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebUI.Controllers
 {
-   
+
     public class ProductController : Controller
     {
         private IProductService _productService;
@@ -18,19 +18,19 @@ namespace ECommerce.WebUI.Controllers
         }
 
         // GET: ProductController
-        public async Task<ActionResult> Index(int page=1,int category=0)
+        public async Task<ActionResult> Index(int page = 1, int category = 0)
         {
-            var products=await _productService.GetAllByCategory(category);
+            var products = await _productService.GetAllByCategory(category);
 
             int pageSize = 10;
 
             var model = new ProductListViewModel
             {
-                Products = products.Skip((page-1)*pageSize).Take(pageSize).ToList(),
-                CurrentCategory=category,
-                PageCount=((int)Math.Ceiling(products.Count/(double)pageSize)),
-                PageSize=pageSize,
-                CurrentPage=page
+                Products = products.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                CurrentCategory = category,
+                PageCount = ((int)Math.Ceiling(products.Count / (double)pageSize)),
+                PageSize = pageSize,
+                CurrentPage = page
             };
             return View(model);
         }
@@ -104,34 +104,36 @@ namespace ECommerce.WebUI.Controllers
             }
         }
 
-        public async Task<IActionResult> SortWithLetter(int page = 1, int category = 0)
+        public async Task<IActionResult> SortWithLetter(bool hasSortClicked, int page = 1, int category = 0)
         {
-            var products = await _productService.GetAllByCategory(category);
-            var sortedProducts = products.OrderBy(p => p.ProductName);
-            int pageSize = 10;
-            var model = new ProductListViewModel();
-            model.Products = sortedProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            model.CurrentCategory = category;
-            model.PageCount = ((int)Math.Ceiling(products.Count / (double)pageSize));
-            model.PageSize = pageSize;
-            model.CurrentPage = page;
-            model.hasSortClicked = true;
-            return View("Index", model);
-        }
-
-        public async Task<IActionResult> SortWithLetterDesc(int page = 1, int category = 0)
-        {
-            var products = await _productService.GetAllByCategory(category);
-            var sortedProducts = products.OrderByDescending(p => p.ProductName);
-            int pageSize = 10;
-            var model = new ProductListViewModel();
-            model.Products = sortedProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            model.CurrentCategory = category;
-            model.PageCount = ((int)Math.Ceiling(products.Count / (double)pageSize));
-            model.PageSize = pageSize;
-            model.CurrentPage = page;
-            model.hasDescSortClicked = true;    
-            return View("Index", model);
+            if (hasSortClicked != true)
+            {
+                var products = await _productService.GetAllByCategory(category);
+                var sortedProducts = products.OrderBy(p => p.ProductName);
+                int pageSize = 10;
+                var model = new ProductListViewModel();
+                model.Products = sortedProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                model.CurrentCategory = category;
+                model.PageCount = ((int)Math.Ceiling(products.Count / (double)pageSize));
+                model.PageSize = pageSize;
+                model.CurrentPage = page;
+                model.hasSortClicked = true;
+                return View("Index", model);
+            }
+            else
+            {
+                var products = await _productService.GetAllByCategory(category);
+                var sortedProducts = products.OrderByDescending(p => p.ProductName);
+                int pageSize = 10;
+                var model = new ProductListViewModel();
+                model.Products = sortedProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                model.CurrentCategory = category;
+                model.PageCount = ((int)Math.Ceiling(products.Count / (double)pageSize));
+                model.PageSize = pageSize;
+                model.CurrentPage = page;
+                model.hasSortClicked = false;
+                return View("Index", model);
+            }
         }
 
         public async Task<IActionResult> SortForPrice(int page = 1, int category = 0)

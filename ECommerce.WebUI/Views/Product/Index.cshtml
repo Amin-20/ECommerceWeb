@@ -1,6 +1,19 @@
 ﻿@model ProductListViewModel
 
-<a class="btn btn-xs btn btn-outline-dark" href="/product/SortWithLetter?page=@Model.CurrentPage&category=@Model.CurrentCategory">A-Z</a>
+<a class="btn btn-xs btn btn-outline-dark" href="/product/SortWithLetter?hasSortClicked=@Model.hasSortClicked&page=@Model.CurrentPage&category=@Model.CurrentCategory">
+    @if (Model.hasSortClicked)
+    {
+        <div>
+            A-Z
+        </div>
+    }
+    else
+    {
+        <div>
+            Z-A
+        </div>
+    }
+</a>
 <a class="btn btn-xs btn btn-outline-dark" href="/product/SortForPrice?page=@Model.CurrentPage&category=@Model.CurrentCategory">High-Lower</a>
 <table class="table">
     <thead>
