@@ -4,14 +4,13 @@
     @if (Model.hasSortClicked)
     {
         <div>
-            A-Z
+            Z-A
         </div>
     }
     else
     {
         <div>
-            Z-A
-
+            A-Z
         </div>
     }
 </a>
@@ -25,7 +24,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="mytable">
         @foreach (var item in Model.Products)
         {
             <tr>

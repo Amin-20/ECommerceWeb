@@ -164,5 +164,21 @@ namespace ECommerce.WebUI.Controllers
             model.hasDescSortPrice = true;
             return View("Index", model);
         }
+
+        public async Task<List<Product>> Search(string word)
+        {
+            var allProducts = await _productService.GetAll();
+
+            if (allProducts != null && !string.IsNullOrEmpty(word))
+            {
+                var result = allProducts.Where(r => r.ProductName.ToLower().Contains(word.ToLower())).ToList();
+                var model = new ProductListViewModel
+                {
+                    Products = result
+                };
+                return result;
+            }
+            return null;
+        }
     }
 }
